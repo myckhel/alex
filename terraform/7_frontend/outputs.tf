@@ -1,6 +1,7 @@
 output "cloudfront_url" {
   description = "CloudFront distribution URL"
-  value       = "https://${aws_cloudfront_distribution.main.domain_name}"
+  value       = "http://alex-frontend-012362580638.s3-website.eu-central-1.amazonaws.com"
+  # value       = "https://${aws_cloudfront_distribution.main.domain_name}"
 }
 
 output "api_gateway_url" {
@@ -24,7 +25,7 @@ output "setup_instructions" {
 
     ✅ Frontend & API infrastructure deployed successfully!
 
-    CloudFront URL: https://${aws_cloudfront_distribution.main.domain_name}
+    CloudFront URL: http://alex-frontend-012362580638.s3-website.eu-central-1.amazonaws.com
     API Gateway: ${aws_apigatewayv2_api.main.api_endpoint}
     S3 Bucket: ${aws_s3_bucket.frontend.id}
     Lambda Function: ${aws_lambda_function.api.function_name}
@@ -37,13 +38,10 @@ output "setup_instructions" {
           npm run build
           aws s3 sync out/ s3://${aws_s3_bucket.frontend.id}/ --delete
 
-       b. Invalidate CloudFront cache:
-          aws cloudfront create-invalidation \
-            --distribution-id ${aws_cloudfront_distribution.main.id} \
-            --paths "/*"
+       
 
     2. Test the deployment:
-       - Visit: https://${aws_cloudfront_distribution.main.domain_name}
+       - Visit: http://alex-frontend-012362580638.s3-website.eu-central-1.amazonaws.com
        - Sign in with Clerk
        - Check API calls in Network tab
 

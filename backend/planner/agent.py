@@ -268,7 +268,8 @@ def create_agent(job_id: str, portfolio_summary: Dict[str, Any], db):
     bedrock_region = os.getenv("BEDROCK_REGION", "us-west-2")
     os.environ["AWS_REGION_NAME"] = bedrock_region
 
-    model = LitellmModel(model=f"bedrock/{model_id}")
+    model = LitellmModel(model=f"gpt-4o-mini")
+    # model = LitellmModel(model=f"bedrock/{model_id}")
 
     tools = [
         invoke_reporter,

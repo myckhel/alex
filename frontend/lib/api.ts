@@ -1,10 +1,10 @@
 /**
  * API client for backend communication
  */
-import { showToast } from '../components/Toast';
+import { showToast } from "../components/Toast";
 
 // API base URL - in production this will be the API Gateway URL
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 // Type definitions
 export interface User {
@@ -51,37 +51,39 @@ export interface ApiError {
 export async function apiRequest<T = unknown>(
   endpoint: string,
   token: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<T> {
   const url = `${API_BASE_URL}${endpoint}`;
 
   const response = await fetch(url, {
     ...options,
     headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${token}`,
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
       ...options.headers,
     },
   });
 
   // Handle JWT expiry (401 Unauthorized)
   if (response.status === 401) {
-    showToast('error', 'Session expired. Please sign in again.');
+    showToast("error", "Session expired. Please sign in again.");
     // Redirect to home page for re-authentication
     setTimeout(() => {
-      window.location.href = '/';
+      window.location.href = "/";
     }, 2000);
-    throw new Error('Session expired');
+    throw new Error("Session expired");
   }
 
   // Handle rate limiting (429 Too Many Requests)
   if (response.status === 429) {
-    showToast('error', 'Too many requests. Please slow down.');
-    throw new Error('Rate limited');
+    showToast("error", "Too many requests. Please slow down.");
+    throw new Error("Rate limited");
   }
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ detail: 'Request failed' }));
+    const error = await response
+      .json()
+      .catch(() => ({ detail: "Request failed" }));
     throw new Error(error.detail || `HTTP ${response.status}`);
   }
 
@@ -95,54 +97,62 @@ export function createApiClient(token: string) {
   return {
     // User endpoints
     user: {
-      get: () => apiRequest<User>('/api/user', token),
-      update: (data: Partial<User>) => apiRequest<User>('/api/user', token, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      }),
+      get: () => apiRequest<User>("/api/user", token),
+      update: (data: Partial<User>) =>
+        apiRequest<User>("/api/user", token, {
+          method: "PUT",
+          body: JSON.stringify(data),
+        }),
     },
 
     // Account endpoints
     accounts: {
-      list: () => apiRequest<Account[]>('/api/accounts', token),
-      create: (data: Partial<Account>) => apiRequest<Account>('/api/accounts', token, {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-      update: (id: string, data: Partial<Account>) => apiRequest<Account>(`/api/accounts/${id}`, token, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      }),
-      positions: (id: string) => apiRequest<Position[]>(`/api/accounts/${id}/positions`, token),
+      list: () => apiRequest<Account[]>("/api/accounts", token),
+      create: (data: Partial<Account>) =>
+        apiRequest<Account>("/api/accounts", token, {
+          method: "POST",
+          body: JSON.stringify(data),
+        }),
+      update: (id: string, data: Partial<Account>) =>
+        apiRequest<Account>(`/api/accounts/${id}`, token, {
+          method: "PUT",
+          body: JSON.stringify(data),
+        }),
+      positions: (id: string) =>
+        apiRequest<Position[]>(`/api/accounts/${id}/positions`, token),
     },
 
     // Position endpoints
     positions: {
-      create: (data: Partial<Position>) => apiRequest<Position>('/api/positions', token, {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
-      update: (id: string, data: Partial<Position>) => apiRequest<Position>(`/api/positions/${id}`, token, {
-        method: 'PUT',
-        body: JSON.stringify(data),
-      }),
-      delete: (id: string) => apiRequest<void>(`/api/positions/${id}`, token, {
-        method: 'DELETE',
-      }),
+      create: (data: Partial<Position>) =>
+        apiRequest<Position>("/api/positions", token, {
+          method: "POST",
+          body: JSON.stringify(data),
+        }),
+      update: (id: string, data: Partial<Position>) =>
+        apiRequest<Position>(`/api/positions/${id}`, token, {
+          method: "PUT",
+          body: JSON.stringify(data),
+        }),
+      delete: (id: string) =>
+        apiRequest<void>(`/api/positions/${id}`, token, {
+          method: "DELETE",
+        }),
     },
 
     // Analysis endpoints
     analysis: {
-      trigger: (data: Record<string, unknown> = {}) => apiRequest<Job>('/api/analyze', token, {
-        method: 'POST',
-        body: JSON.stringify(data),
-      }),
+      trigger: (data: Record<string, unknown> = {}) =>
+        apiRequest<Job>("/api/analyze", token, {
+          method: "POST",
+          body: JSON.stringify(data),
+        }),
     },
 
     // Job endpoints
     jobs: {
       get: (id: string) => apiRequest<Job>(`/api/jobs/${id}`, token),
-      list: () => apiRequest<Job[]>('/api/jobs', token),
+      list: () => apiRequest<Job[]>("/api/jobs", token),
     },
   };
 }

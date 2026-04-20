@@ -25,7 +25,8 @@ async def evaluate(original_instructions, original_task, original_output) -> Eva
     os.environ["AWS_REGION_NAME"] = bedrock_region
     logger.info(f"DEBUG: Set AWS_REGION_NAME to {bedrock_region}")
 
-    model = LitellmModel(model=f"bedrock/{model_id}")
+    model = LitellmModel(model=f"gpt-4o-mini")
+    # model = LitellmModel(model=f"bedrock/{model_id}")
 
     instructions = """
 You are an Evaluation Agent that evaluates the quality of a financial report from a financial planning agent.

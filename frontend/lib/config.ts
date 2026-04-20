@@ -2,17 +2,17 @@
 export const getApiUrl = () => {
   // In production (static export), use relative path which CloudFront will route to API Gateway
   // In development, use localhost:8000
-  if (typeof window !== 'undefined') {
+  if (typeof window !== "undefined") {
     // Client-side: check if we're on localhost
-    if (window.location.hostname === 'localhost') {
-      return 'http://localhost:8000';
+    if (window.location.hostname === "localhost") {
+      return "http://localhost:8000";
     } else {
       // Production: use relative path (CloudFront handles routing /api/* to API Gateway)
-      return '';
+      return "https://awv82l0cy3.execute-api.eu-central-1.amazonaws.com";
     }
   }
   // Server-side during build
-  return '';
+  return "https://awv82l0cy3.execute-api.eu-central-1.amazonaws.com";
 };
 
 export const API_URL = getApiUrl();

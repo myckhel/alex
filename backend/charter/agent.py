@@ -149,7 +149,8 @@ def create_agent(job_id: str, portfolio_data: Dict[str, Any], db=None):
     logger.info(f"Charter: Creating agent with model_id={model_id}, region={bedrock_region}")
     logger.info(f"Charter: Job ID: {job_id}")
     
-    model = LitellmModel(model=f"bedrock/{model_id}")
+    model = LitellmModel(model=f"gpt-4o-mini")
+    # model = LitellmModel(model=f"bedrock/{model_id}")
     
     # Analyze the portfolio upfront
     portfolio_analysis = analyze_portfolio(portfolio_data)

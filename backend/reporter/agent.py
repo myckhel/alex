@@ -193,7 +193,8 @@ def create_agent(job_id: str, portfolio_data: Dict[str, Any], user_data: Dict[st
     os.environ["AWS_REGION_NAME"] = bedrock_region
     logger.info(f"DEBUG: Set AWS_REGION_NAME to {bedrock_region}")
 
-    model = LitellmModel(model=f"bedrock/{model_id}")
+    model = LitellmModel(model=f"gpt-4o-mini")
+    # model = LitellmModel(model=f"bedrock/{model_id}")
 
     # Create context
     context = ReporterContext(
